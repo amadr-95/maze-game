@@ -1,0 +1,45 @@
+body {
+    width: 80%;
+    margin: 50px auto;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 2em;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+.cruceta-juego {
+    display: inline-block;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+.derecha-izquierda a + a {
+    margin-left: 4em;
+}
+
+table {
+    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+table td {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    text-align: center;
+}
+
+.pared {
+    background-color: black;
+}
