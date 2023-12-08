@@ -86,7 +86,19 @@ public class ProcesarMovimientoServlet extends HttpServlet {
                 elemento = laberinto.getMapa()[posicion[0] + 1][posicion[1]];
                 return elemento == Laberinto2.VACIO || elemento == Laberinto2.MALO || elemento == Laberinto2.PREMIO;
             case "izquierda":
+                //comprobar si se sale del tablero
+                if (posicion[1] - 1 < 0) {
+                    return false;
+                }
+                elemento = laberinto.getMapa()[posicion[0]][posicion[1] - 1];
+                return elemento == Laberinto2.VACIO || elemento == Laberinto2.MALO || elemento == Laberinto2.PREMIO;
             case "derecha":
+                //comprobar si se sale del tablero
+                if (posicion[1] + 1 >= laberinto.getNumColumnas()) {
+                    return false;
+                }
+                elemento = laberinto.getMapa()[posicion[0]][posicion[1] + 1];
+                return elemento == Laberinto2.VACIO || elemento == Laberinto2.MALO || elemento == Laberinto2.PREMIO;
             default:
                 return false;
         }
@@ -121,12 +133,30 @@ public class ProcesarMovimientoServlet extends HttpServlet {
     }
 
     private void moverIzquierda(Laberinto2 laberinto, int[] posicion, boolean sePuede, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("mensaje", "Movimiento hacia izquierda");
+        if (sePuede) {
+            //borrar la posicion actual
+            laberinto.getMapa()[posicion[0]][posicion[1]] = Laberinto2.VACIO;
+            //insertar la posicion nueva
+            laberinto.getMapa()[posicion[0]][posicion[1] - 1] = Laberinto2.PROTA;
+            request.setAttribute("mensaje", "Movimiento hacia izquierda");
+        } else {
+            //no se puede mover
+            request.setAttribute("mensaje", "Movimiento no permitido");
+        }
         request.getRequestDispatcher("/juego.jsp").forward(request, response);
     }
 
     private void moverDerecha(Laberinto2 laberinto, int[] posicion, boolean sePuede, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("mensaje", "Movimiento hacia derecha");
+        if (sePuede) {
+            //borrar la posicion actual
+            laberinto.getMapa()[posicion[0]][posicion[1]] = Laberinto2.VACIO;
+            //insertar la posicion nueva
+            laberinto.getMapa()[posicion[0]][posicion[1] + 1] = Laberinto2.PROTA;
+            request.setAttribute("mensaje", "Movimiento hacia derecha");
+        } else {
+            //no se puede mover
+            request.setAttribute("mensaje", "Movimiento no permitido");
+        }
         request.getRequestDispatcher("/juego.jsp").forward(request, response);
     }
 
