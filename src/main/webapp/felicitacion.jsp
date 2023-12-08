@@ -1,16 +1,16 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: Amador
-  Date: 06/12/2023
-  Time: 21:11
-  To change this template use File | Settings | File Templates.
---%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    if (session.getAttribute("nombreUsuario") == null) {
+        response.sendRedirect("index.jsp");
+    }
+%>
 <html>
 <head>
     <title>Felicitación</title>
 </head>
 <body>
+    <h1>Enhorabuena <c:out value="${sessionScope.nombreUsuario}"/>, has ganado!</h1>
 
 </body>
 </html>
