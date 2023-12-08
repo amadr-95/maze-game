@@ -8,7 +8,7 @@
 <h1>Bienvenido al juego del laberinto</h1>
 <h3>Introduce tu nombre de usuario para jugar</h3>
 <%-- Formulario para introducir el nombre de usuario --%>
-<form action="SesionServlet" method="post">
+<form action="SesionServlet">
     <input type="text" name="nombre" placeholder="Nombre de usuario">
     <input type="submit" value="Jugar">
 </form>

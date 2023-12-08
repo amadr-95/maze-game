@@ -15,7 +15,7 @@ public class SesionServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         // Obtener el nombre de usuario del formulario
         String nombreUsuario = request.getParameter("nombre");
