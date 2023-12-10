@@ -40,6 +40,10 @@ table td {
     text-align: center;
 }
 
-.pared {
-    background-color: black;
+.info {
+    margin: 1em auto;
+}
+
+.error {
+    color: red;
 }
