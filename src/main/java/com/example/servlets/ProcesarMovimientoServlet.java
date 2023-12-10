@@ -90,6 +90,23 @@ public class ProcesarMovimientoServlet extends HttpServlet {
             case "derecha":
                 nuevaColumna++;
                 break;
+            //a partir de aquí solo entrará el malo
+            case "arriba_izquierda":
+                nuevaFila--;
+                nuevaColumna--;
+                break;
+            case "arriba_derecha":
+                nuevaFila--;
+                nuevaColumna++;
+                break;
+            case "abajo_izquierda":
+                nuevaFila++;
+                nuevaColumna--;
+                break;
+            case "abajo_derecha":
+                nuevaFila++;
+                nuevaColumna++;
+                break;
             default:
                 return false;
         }
@@ -187,13 +204,36 @@ public class ProcesarMovimientoServlet extends HttpServlet {
         }
     }
 
+    private String calcularDireccion2(int dx, int dy) {
+        if (dx == 0 && dy == -1) {
+            return "arriba";
+        } else if (dx == 0 && dy == 1) {
+            return "abajo";
+        } else if (dx == -1 && dy == 0) {
+            return "izquierda";
+        } else if (dx == 1 && dy == 0) {
+            return "derecha";
+        } else if (dx == -1 && dy == -1) {
+            return "arriba_izquierda";
+        } else if (dx == 1 && dy == -1) {
+            return "arriba_derecha";
+        } else if (dx == -1 && dy == 1) {
+            return "abajo_izquierda";
+        } else if (dx == 1 && dy == 1) {
+            return "abajo_derecha";
+        } else {
+            // En caso de que las diferencias no representen una dirección válida (por defecto)
+            return "derecha";
+        }
+    }
+
     private int[] moverMalo(Laberinto2 laberinto, int[] posicionMalo, int[] posicionProta, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        boolean atrapado = false;
+//        boolean atrapado = false;
         // Calcular la dirección hacia el protagonista
         int dx = Integer.compare(posicionProta[1], posicionMalo[1]); //columna
         int dy = Integer.compare(posicionProta[0], posicionMalo[0]); //fila
         //Calculamos la direccion en la que deberia moverse el malo
-        String direccion = calcularDireccion(dx, dy);
+        String direccion = calcularDireccion2(dx, dy);
 
         // Inserta la posición nueva
         /*int nuevaFila = posicionMalo[0];
@@ -231,6 +271,22 @@ public class ProcesarMovimientoServlet extends HttpServlet {
                     nuevaColumna--;
                     break;
                 case "derecha":
+                    nuevaColumna++;
+                    break;
+                case "arriba_izquierda":
+                    nuevaFila--;
+                    nuevaColumna--;
+                    break;
+                case "arriba_derecha":
+                    nuevaFila--;
+                    nuevaColumna++;
+                    break;
+                case "abajo_izquierda":
+                    nuevaFila++;
+                    nuevaColumna--;
+                    break;
+                case "abajo_derecha":
+                    nuevaFila++;
                     nuevaColumna++;
                     break;
             }
