@@ -18,7 +18,7 @@
 <%-- pintar mapa del laberinto --%>
 <main>
     <div class="panel-juego">
-<%--        pintar solo las celdas alrededor del protagonista --%>
+        <%--        pintar solo las celdas alrededor del protagonista --%>
         <%--<table>
             <c:forEach items="${laberinto.mapa}" var="fila" varStatus="i">
                 <tr>
@@ -44,11 +44,18 @@
     </div>
     <%--include de los controles del personaje--%>
     <jsp:include page="controles.jsp"/>
-    <c:if test="${not empty requestScope.mensaje}">
-        <div class="mensaje">
-            ${requestScope.mensaje}
-        </div>
+    <c:if test="${not empty requestScope.error}">
+        <p class="error">${requestScope.error}</p>
     </c:if>
+    <div class="mensajes">
+        <c:if test="${not empty requestScope.infoProta}">
+            <p class="info">${requestScope.infoProta}</p>
+        </c:if>
+        <c:if test="${not empty requestScope.infoMalo}">
+            <p class="info">${requestScope.infoMalo}</p>
+        </c:if>
+    </div>
+
 </main>
 </body>
 </html>

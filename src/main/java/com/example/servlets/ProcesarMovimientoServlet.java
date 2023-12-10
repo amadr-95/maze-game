@@ -24,25 +24,46 @@ public class ProcesarMovimientoServlet extends HttpServlet {
 
         if (direccion != null) {
             //obtenemos la posicion del protagonista
-            int[] posicion = posicionProtagonista(laberinto);
+            int[] posicionProta = posicionElementoJuego(Laberinto2.PROTA, laberinto);
+            //Obtenemos la posicion del malo
+            int[] posicionMalo = posicionElementoJuego(Laberinto2.MALO, laberinto);
+            //Obtenemos la posicion del premio
+            int[] posicionPremio = posicionElementoJuego(Laberinto2.PREMIO, laberinto);
 
-            if (comprobarMovimiento(laberinto, posicion, direccion)) {
-                mover(laberinto, posicion, direccion, request, response);
+            int[] nuevaPosicionProta = posicionProta; //por defecto
+            if (comprobarMovimiento(laberinto, posicionProta, direccion, Laberinto2.PROTA)) {
+                //si se puede mover, devuelve su nueva posicion
+                nuevaPosicionProta = moverProta(laberinto, posicionProta, direccion, request);
             } else {
-                movimientoNoPermitido(request, response);
+                movimientoNoPermitido(request, Laberinto2.PROTA);
             }
+
+            // Mover al personaje malo con la nueva posición del protagonista
+            int[] nuevaPosicionMalo = moverMalo(laberinto, posicionMalo, nuevaPosicionProta, request);
+
+            // Verificar si el prota ha atrapado el premio
+            if (nuevaPosicionProta[0] == posicionPremio[0] && nuevaPosicionProta[1] == posicionPremio[1]) {
+                response.sendRedirect("felicitacion.jsp");
+                // Verificar si el malo ha atrapado al prota
+            } else if (nuevaPosicionMalo[0] == nuevaPosicionProta[0] && nuevaPosicionMalo[1] == nuevaPosicionProta[1]) {
+                response.sendRedirect("consolacion.jsp");
+            } else {
+                // Sigue el juego
+                request.getRequestDispatcher("/juego.jsp").forward(request, response);
+            }
+
         } else {
-            movimientoNoPermitido(request, response);
+            request.setAttribute("error", "No has proporcionado una dirección válida");
         }
     }
 
     //Model
-    private int[] posicionProtagonista(Laberinto2 laberinto) {
+    private int[] posicionElementoJuego(Character elemento, Laberinto2 laberinto) {
         //buscar la posicion del protagonista en el mapa
         int[] posicion = new int[2];
         for (int f = 0; f < laberinto.getNumFilas(); f++) {
             for (int c = 0; c < laberinto.getNumColumnas(); c++) {
-                if (laberinto.getMapa()[f][c].equals(Laberinto2.PROTA)) {
+                if (laberinto.getMapa()[f][c] == elemento) {
                     posicion[0] = f;
                     posicion[1] = c;
                     break;
@@ -52,47 +73,144 @@ public class ProcesarMovimientoServlet extends HttpServlet {
         return posicion;
     }
 
-    private boolean comprobarMovimiento(Laberinto2 laberinto, int[] posicion, String direccion) {
-        //comprobar si puede moverse a esa posicion
-        Character elemento;
+    private boolean comprobarMovimiento(Laberinto2 laberinto, int[] posicion, String direccion, Character personaje) {
+        int nuevaFila = posicion[0];
+        int nuevaColumna = posicion[1];
+
         switch (direccion) {
             case "arriba":
-                //comprobar si se sale del tablero
-                if (posicion[0] - 1 < 0) {
-                    return false;
-                }
-                elemento = laberinto.getMapa()[posicion[0] - 1][posicion[1]];
-                return elemento == Laberinto2.VACIO || elemento == Laberinto2.MALO || elemento == Laberinto2.PREMIO;
+                nuevaFila--;
+                break;
             case "abajo":
-                //comprobar si se sale del tablero
-                if (posicion[0] + 1 >= laberinto.getNumFilas()) {
-                    return false;
-                }
-                elemento = laberinto.getMapa()[posicion[0] + 1][posicion[1]];
-                return elemento == Laberinto2.VACIO || elemento == Laberinto2.MALO || elemento == Laberinto2.PREMIO;
+                nuevaFila++;
+                break;
             case "izquierda":
-                //comprobar si se sale del tablero
-                if (posicion[1] - 1 < 0) {
-                    return false;
-                }
-                elemento = laberinto.getMapa()[posicion[0]][posicion[1] - 1];
-                return elemento == Laberinto2.VACIO || elemento == Laberinto2.MALO || elemento == Laberinto2.PREMIO;
+                nuevaColumna--;
+                break;
             case "derecha":
-                //comprobar si se sale del tablero
-                if (posicion[1] + 1 >= laberinto.getNumColumnas()) {
-                    return false;
-                }
-                elemento = laberinto.getMapa()[posicion[0]][posicion[1] + 1];
-                return elemento == Laberinto2.VACIO || elemento == Laberinto2.MALO || elemento == Laberinto2.PREMIO;
+                nuevaColumna++;
+                break;
+            //a partir de aquí solo entrará el malo
+            case "arriba_izquierda":
+                nuevaFila--;
+                nuevaColumna--;
+                break;
+            case "arriba_derecha":
+                nuevaFila--;
+                nuevaColumna++;
+                break;
+            case "abajo_izquierda":
+                nuevaFila++;
+                nuevaColumna--;
+                break;
+            case "abajo_derecha":
+                nuevaFila++;
+                nuevaColumna++;
+                break;
             default:
                 return false;
         }
+
+        // Comprobar si se sale del tablero
+        if (nuevaFila < 0 || nuevaFila >= laberinto.getNumFilas() || nuevaColumna < 0 || nuevaColumna >= laberinto.getNumColumnas()) {
+            return false;
+        }
+
+        // Obtener el elemento en la nueva posición
+        Character elemento = laberinto.getMapa()[nuevaFila][nuevaColumna];
+
+        // Verificar si el personaje puede moverse a esa posición
+        if (personaje == Laberinto2.PROTA) {
+            return elemento == Laberinto2.VACIO || elemento == Laberinto2.PREMIO || elemento == Laberinto2.MALO;
+        } else if (personaje == Laberinto2.MALO) {
+            return elemento == Laberinto2.VACIO || elemento == Laberinto2.PROTA;
+        }
+
+        return false;
     }
 
-    private void mover(Laberinto2 laberinto, int[] posicion, String direccion,
-                       HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        boolean hayPremio = false;
+    private String calcularDireccion(int dx, int dy) {
+        if (dx == 0 && dy == -1) {
+            return "arriba";
+        } else if (dx == 0 && dy == 1) {
+            return "abajo";
+        } else if (dx == -1 && dy == 0) {
+            return "izquierda";
+        } else if (dx == 1 && dy == 0) {
+            return "derecha";
+        } else if (dx == -1 && dy == -1) {
+            return "arriba_izquierda";
+        } else if (dx == 1 && dy == -1) {
+            return "arriba_derecha";
+        } else if (dx == -1 && dy == 1) {
+            return "abajo_izquierda";
+        } else if (dx == 1 && dy == 1) {
+            return "abajo_derecha";
+        } else {
+            // En caso de que las diferencias no representen una dirección válida (por defecto)
+            return "derecha";
+        }
+    }
 
+    private int[] moverMalo(Laberinto2 laberinto, int[] posicionMalo, int[] posicionProta, HttpServletRequest request) {
+        // Calcular la dirección hacia el protagonista
+        int dx = Integer.compare(posicionProta[1], posicionMalo[1]); //columna
+        int dy = Integer.compare(posicionProta[0], posicionMalo[0]); //fila
+        //Calculamos la direccion en la que deberia moverse el malo
+        String direccion = calcularDireccion(dx, dy);
+
+        int nuevaFila = posicionMalo[0];
+        int nuevaColumna = posicionMalo[1];
+        // Intentar mover al malo en la direccion calculada
+        if (comprobarMovimiento(laberinto, posicionMalo, direccion, Laberinto2.MALO)) {
+            // Borra la posición actual del malo
+            laberinto.getMapa()[posicionMalo[0]][posicionMalo[1]] = Laberinto2.VACIO;
+            // Inserta la posición nueva
+            switch (direccion) {
+                case "arriba":
+                    nuevaFila--;
+                    break;
+                case "abajo":
+                    nuevaFila++;
+                    break;
+                case "izquierda":
+                    nuevaColumna--;
+                    break;
+                case "derecha":
+                    nuevaColumna++;
+                    break;
+                case "arriba_izquierda":
+                    nuevaFila--;
+                    nuevaColumna--;
+                    break;
+                case "arriba_derecha":
+                    nuevaFila--;
+                    nuevaColumna++;
+                    break;
+                case "abajo_izquierda":
+                    nuevaFila++;
+                    nuevaColumna--;
+                    break;
+                case "abajo_derecha":
+                    nuevaFila++;
+                    nuevaColumna++;
+                    break;
+            }
+            // Muevo al malo
+            laberinto.getMapa()[nuevaFila][nuevaColumna] = Laberinto2.MALO;
+            request.setAttribute("infoMalo", "Malo: Movimiento hacia " + direccion);
+        } else {
+            // Si no se puede mover en la dirección calculada, de momento no se mueve y se queda en la misma posición
+            nuevaFila = posicionMalo[0];
+            nuevaColumna = posicionMalo[1];
+            movimientoNoPermitido(request, Laberinto2.MALO);
+            // como opcion estaria moverlo a una posicion aleatoria o incluso moverlo hacia el premio (el juego se complica bastante)
+        }
+
+        return new int[]{nuevaFila, nuevaColumna};
+    }
+
+    private int[] moverProta(Laberinto2 laberinto, int[] posicion, String direccion, HttpServletRequest request) {
         // Borra la posición actual del protagonista
         laberinto.getMapa()[posicion[0]][posicion[1]] = Laberinto2.VACIO;
 
@@ -115,23 +233,18 @@ public class ProcesarMovimientoServlet extends HttpServlet {
                 break;
         }
 
-        if (laberinto.getMapa()[nuevaFila][nuevaColumna] == laberinto.PREMIO) {
-            hayPremio = true;
-        }
-
         // Muevo al protagonista
         laberinto.getMapa()[nuevaFila][nuevaColumna] = Laberinto2.PROTA;
-        request.setAttribute("mensaje", "Movimiento hacia " + direccion);
+        request.setAttribute("infoProta", "Prota: Movimiento hacia " + direccion);
 
-        if (hayPremio) {
-            response.sendRedirect("felicitacion.jsp");
-        } else {
-            request.getRequestDispatcher("/juego.jsp").forward(request, response);
-        }
+        //Devolvemos la nueva posicion del protagonista
+        return new int[]{nuevaFila, nuevaColumna};
     }
 
-    private void movimientoNoPermitido(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("mensaje", "Movimiento no permitido");
-        request.getRequestDispatcher("/juego.jsp").forward(request, response);
+    private void movimientoNoPermitido(HttpServletRequest request, Character personaje) {
+        if (personaje == Laberinto2.PROTA)
+            request.setAttribute("infoProta", "Prota: Movimiento no permitido");
+        else if (personaje == Laberinto2.MALO)
+            request.setAttribute("infoMalo", "Malo: Movimiento no permitido");
     }
 }

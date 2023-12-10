@@ -11,6 +11,6 @@
     <title>Consolación</title>
 </head>
 <body>
-
+<h1>Has perdido</h1>
 </body>
 </html>
