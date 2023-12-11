@@ -11,6 +11,5 @@
 </head>
 <body>
     <h1>Enhorabuena <c:out value="${sessionScope.nombreUsuario}"/>, has ganado!</h1>
-
 </body>
 </html>
