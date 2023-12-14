@@ -1,8 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.proyecto.modelo.Laberinto2" %>
+<%@ page import="com.proyecto.modelo.Laberinto" %>
 <%--Controller--%>
-<jsp:useBean id="laberinto" class="com.proyecto.modelo.Laberinto2" scope="session"/>
+<jsp:useBean id="laberinto" class="com.proyecto.modelo.Laberinto" scope="session"/>
 <%
     if (session.getAttribute("nombreUsuario") == null) {
         response.sendRedirect("index.jsp");
@@ -24,17 +24,17 @@
                 <tr>
                     <c:forEach items="${fila}" var="celda">
                         <c:choose>
-                            <c:when test="${celda == Laberinto2.MALO}">
-                                <td><img src="images/png/badSanta.png"></td>
+                            <c:when test="${celda == Laberinto.MALO}">
+                                <td><img src="images/png/badSanta.png" alt="bad santa"></td>
                             </c:when>
-                            <c:when test="${celda == Laberinto2.PROTA}">
-                                <td><img src="images/png/santa.png"></td>
+                            <c:when test="${celda == Laberinto.PROTA}">
+                                <td><img src="images/png/santa.png" alt="santa"></td>
                             </c:when>
-                            <c:when test="${celda == Laberinto2.OBSTACULO}">
-                                <td><img src="images/png/wall.png"></td>
+                            <c:when test="${celda == Laberinto.OBSTACULO}">
+                                <td><img src="images/png/wall.png" alt="wall"></td>
                             </c:when>
-                            <c:when test="${celda == Laberinto2.PREMIO}">
-                                <td><img src="images/png/prize.png"></td>
+                            <c:when test="${celda == Laberinto.PREMIO}">
+                                <td><img src="images/png/prize.png" alt="prize"></td>
                             </c:when>
                             <c:otherwise>
                                 <td>${celda}</td>

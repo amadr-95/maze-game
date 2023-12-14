@@ -2,7 +2,7 @@ package com.proyecto.modelo;
 
 import java.util.Random;
 
-public class Laberinto2 {
+public class Laberinto {
     private final int numFilas;
     private final int numColumnas;
     private Character[][] mapa;
@@ -19,7 +19,7 @@ public class Laberinto2 {
     public static char OBSTACULO_VISIBLE = 'o';
     public static char PREMIO_VISIBLE = 'r';
 
-    public Laberinto2() {
+    public Laberinto() {
         this(20, 20);
         for (int longitud = 4; longitud < 8; longitud++) {
             insertarObstaculoAleatorio(longitud);
@@ -36,7 +36,7 @@ public class Laberinto2 {
         insertarElemento(PREMIO);
     }
 
-    public Laberinto2(int numFilas, int numColumnas) {
+    public Laberinto(int numFilas, int numColumnas) {
         this.numFilas = numFilas;
         this.numColumnas = numColumnas;
         mapa = new Character[numFilas][numColumnas];
