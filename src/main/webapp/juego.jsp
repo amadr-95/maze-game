@@ -1,8 +1,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.example.modelo.Laberinto2" %>
+<%@ page import="com.proyecto.modelo.Laberinto2" %>
 <%--Controller--%>
-<jsp:useBean id="laberinto" class="com.example.modelo.Laberinto2" scope="session"/>
+<jsp:useBean id="laberinto" class="com.proyecto.modelo.Laberinto2" scope="session"/>
 <%
     if (session.getAttribute("nombreUsuario") == null) {
         response.sendRedirect("index.jsp");
@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>Juego</title>
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/juego.css">
 </head>
 <body>
 <h1>Jugando como <%=session.getAttribute("nombreUsuario")%>

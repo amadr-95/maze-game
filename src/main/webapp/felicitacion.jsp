@@ -8,54 +8,7 @@
 <html>
 <head>
     <title>Felicitacion</title>
-    <style>
-        body {
-            background-color: #f2f2f2;
-            font-family: Arial, sans-serif;
-        }
-
-        .card {
-            width: 600px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        h1 {
-            text-align: center;
-            color: #c52323;
-        }
-
-        p {
-            text-align: center;
-            font-size: 18px;
-            color: #333333;
-        }
-
-        img {
-            width: 100%;
-            height: auto;
-        }
-
-        button {
-            background-color: #c52323;
-            border: none;
-            color: white;
-            padding: 15px 32px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 4px 2px;
-            cursor: pointer;
-        }
-
-        .center {
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/fin-juego.css">
 </head>
 <body>
 <div class="card">

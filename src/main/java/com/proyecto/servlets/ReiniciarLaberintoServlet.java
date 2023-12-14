@@ -1,4 +1,4 @@
-package com.example.servlets;
+package com.proyecto.servlets;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 @WebServlet(name = "ReiniciarLaberintoServlet", value = "/ReiniciarLaberintoServlet")
 public class ReiniciarLaberintoServlet extends HttpServlet {

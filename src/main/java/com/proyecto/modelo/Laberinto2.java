@@ -1,12 +1,11 @@
-package com.example.modelo;
+package com.proyecto.modelo;
 
 import java.util.Random;
 
-@Deprecated
-public class Laberinto {
+public class Laberinto2 {
     private final int numFilas;
     private final int numColumnas;
-    private final char[][] mapa;
+    private Character[][] mapa;
 
     // Constantes
     public static char VACIO = ' ';
@@ -20,11 +19,8 @@ public class Laberinto {
     public static char OBSTACULO_VISIBLE = 'o';
     public static char PREMIO_VISIBLE = 'r';
 
-    public Laberinto() {
-//        this(20, 20);
-        this.numColumnas = 20;
-        this.numFilas = 20;
-        this.mapa = new char[numFilas][numColumnas];
+    public Laberinto2() {
+        this(20, 20);
         for (int longitud = 4; longitud < 8; longitud++) {
             insertarObstaculoAleatorio(longitud);
             if (longitud < 6) {
@@ -32,18 +28,24 @@ public class Laberinto {
                 insertarObstaculoAleatorio(longitud);
             }
         }
+        //insertar protagonista en posicion aleatoria
+        insertarElemento(PROTA);
+        // insertar malo en posicion aleatoria
+        insertarElemento(MALO);
+        // insertar premio en posicion aleatoria
+        insertarElemento(PREMIO);
     }
 
-    /*public Laberinto(int numFilas, int numColumnas) {
+    public Laberinto2(int numFilas, int numColumnas) {
         this.numFilas = numFilas;
         this.numColumnas = numColumnas;
-        mapa = new char[numFilas][numColumnas];
+        mapa = new Character[numFilas][numColumnas];
         for (int f = 0; f < numFilas; f++) {
             for (int c = 0; c < numColumnas; c++) {
                 mapa[f][c] = ' ';
             }
         }
-    }*/
+    }
 
     public int getNumFilas() {
         return numFilas;
@@ -53,28 +55,35 @@ public class Laberinto {
         return numColumnas;
     }
 
-    public char[][] getMapa() {
+    public Character[][] getMapa() {
         return mapa;
+    }
+
+    public void insertarElemento(char elemento) {
+        Random rand = new Random(System.nanoTime());
+        int fila, columna;
+        do {
+            fila = rand.nextInt(numFilas);
+            columna = rand.nextInt(numColumnas);
+        } while (!mapa[fila][columna].equals(VACIO));
+        mapa[fila][columna] = elemento;
     }
 
     public boolean insertarObstaculo(int fila, int columna, int longitud, char direccion) {
         boolean sePuede = true;
+
         if (direccion == 'h') {
             if (columna + longitud > numColumnas || fila >= numFilas) {
                 sePuede = false;
             } else {
-                for (int c = columna; c < columna + longitud && sePuede; c++) {
+                for (int c = columna; c < columna + longitud; c++) {
                     if (mapa[fila][c] != VACIO && mapa[fila][c] != VACIO_VISIBLE) {
                         sePuede = false;
-                    }
-                }
-                if (sePuede) {
-                    for (int c = columna; c < columna + longitud; c++) {
-                        mapa[fila][c] = OBSTACULO;
+                        break;
                     }
                 }
             }
-        } else {
+        } else if (direccion == 'v') {
             if (fila + longitud > numFilas || columna >= numColumnas) {
                 sePuede = false;
             } else {
@@ -83,15 +92,26 @@ public class Laberinto {
                         sePuede = false;
                     }
                 }
-                if (sePuede) {
-                    for (int f = fila; f < fila + longitud; f++) {
-                        mapa[f][columna] = OBSTACULO;
-                    }
+            }
+        } else {
+            sePuede = false; // Dirección no válida
+        }
+
+        if (sePuede) {
+            if (direccion == 'h') {
+                for (int c = columna; c < columna + longitud; c++) {
+                    mapa[fila][c] = OBSTACULO;
+                }
+            } else {
+                for (int f = fila; f < fila + longitud; f++) {
+                    mapa[f][columna] = OBSTACULO;
                 }
             }
         }
+
         return sePuede;
     }
+
 
     public boolean insertarObstaculoAleatorio(int longitud) {
         boolean insertado = false;
@@ -107,25 +127,4 @@ public class Laberinto {
         return insertado;
     }
 }
-
-    /*@Override
-    public String toString() {
-        String res = "";
-        for (int i = 0; i < numColumnas + 2; i++) {
-            res += '-';
-        }
-        res += '\n';
-        for (int f = 0; f < numFilas; f++) {
-            res += '|';
-            for (int c = 0; c < numColumnas; c++) {
-                res += mapa[f][c];
-            }
-            res += "|\n";
-        }
-        for (int i = 0; i < numColumnas + 2; i++) {
-            res += '-';
-        }
-        res += '\n';
-        return res;
-    }*/
 

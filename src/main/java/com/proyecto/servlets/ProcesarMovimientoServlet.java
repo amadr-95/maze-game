@@ -1,6 +1,6 @@
-package com.example.servlets;
+package com.proyecto.servlets;
 
-import com.example.modelo.Laberinto2;
+import com.proyecto.modelo.Laberinto2;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
