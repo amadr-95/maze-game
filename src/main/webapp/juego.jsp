@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.example.modelo.Laberinto2" %>
 <%--Controller--%>
 <jsp:useBean id="laberinto" class="com.example.modelo.Laberinto2" scope="session"/>
 <%
@@ -22,7 +23,23 @@
             <c:forEach items="${laberinto.mapa}" var="fila">
                 <tr>
                     <c:forEach items="${fila}" var="celda">
-                        <td>${celda}</td>
+                        <c:choose>
+                            <c:when test="${celda == Laberinto2.MALO}">
+                                <td><img src="images/png/badSanta.png"></td>
+                            </c:when>
+                            <c:when test="${celda == Laberinto2.PROTA}">
+                                <td><img src="images/png/santa.png"></td>
+                            </c:when>
+                            <c:when test="${celda == Laberinto2.OBSTACULO}">
+                                <td><img src="images/png/wall.png"></td>
+                            </c:when>
+                            <c:when test="${celda == Laberinto2.PREMIO}">
+                                <td><img src="images/png/prize.png"></td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>${celda}</td>
+                            </c:otherwise>
+                        </c:choose>
                     </c:forEach>
                 </tr>
             </c:forEach>

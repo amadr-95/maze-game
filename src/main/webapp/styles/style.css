@@ -13,6 +13,7 @@ main {
     grid-template-columns: 1fr 1fr;
     align-items: center;
     justify-items: center;
+    gap: 1em;
 }
 
 .cruceta-juego {
@@ -34,9 +35,8 @@ table {
 }
 
 table td {
-    width: 25px;
-    height: 25px;
-    /*border: 1px solid black;*/
+    width: 28px;
+    height: 28px;
     text-align: center;
 }
 
@@ -47,3 +47,15 @@ table td {
 .error {
     color: red;
 }
+
+.reiniciar-btn {
+    margin-top: 1em;
+    width: 135px;
+    padding: 10px;
+    background-color: rgb(197, 35, 35);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
