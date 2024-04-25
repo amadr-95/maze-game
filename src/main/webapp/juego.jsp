@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="styles/juego.css">
 </head>
 <body>
-<h1>Jugando como <%=session.getAttribute("nombreUsuario")%>
+<h1>Playing as <%=session.getAttribute("nombreUsuario")%>
 </h1>
 <%-- pintar mapa del laberinto --%>
 <main>
