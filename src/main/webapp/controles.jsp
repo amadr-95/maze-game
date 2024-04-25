@@ -29,5 +29,5 @@
         </svg>
     </a>
     <br>
-    <a href="ReiniciarLaberintoServlet"><button class="reiniciar-btn">Reiniciar</button></a>
+    <a href="ReiniciarLaberintoServlet"><button class="reiniciar-btn">Restart</button></a>
 </div>
